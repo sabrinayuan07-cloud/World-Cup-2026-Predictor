@@ -1,0 +1,18 @@
+# Data files (downloaded via KaggleHub, not committed)
+*.csv
+*.parquet
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Caches
+.cache/
+
+# OS
+.DS_Store
