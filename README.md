@@ -1,39 +1,20 @@
-# World Cup 2026 Predictor ⚽
+# World Cup 2026 Predictor
+A machine learning project that predicts FIFA World Cup 2026 match outcomes from player performance stats, then simulates the knockout bracket to pick a tournament winner.
 
-A machine learning project that predicts the outcomes of FIFA World Cup 2026 matches — and simulates the tournament bracket to crown a predicted winner — from player performance data.
+## The data
+The dataset comes from Kaggle and has per-player, per-match statistics — about 54,600 rows and 75 columns covering goals, expected goals (xG), passing, defensive actions, and physical metrics like distance covered and top speed.
 
-## Overview
-
-The dataset contains **per-player, per-match** performance statistics (~54,600 rows, 75 features). To predict match outcomes, individual player rows are aggregated up to the **team-vs-team match level**, then a classifier is trained to predict the result.
-
-> **Note:** The 2026 tournament has not been played, so this dataset is **simulated/synthetic**. This project models that simulated data as a machine learning exercise — it is not a real-world forecast.
-
-## Dataset
-
-[FIFA World Cup 2026 Player Performance Dataset](https://www.kaggle.com/datasets/rauffauzanrambe/fifa-world-cup-2026-player-performance-dataset) (Kaggle)
-
-Downloaded automatically via KaggleHub — see the notebook. The raw CSV is not committed to this repo (see `.gitignore`).
+Since the 2026 tournament hasn't actually been played, the data is simulated. I'm treating this as a modeling exercise to practice the full ML workflow end to end, not as a real forecast.
 
 ## Approach
+Each row is one player in one match, but I want to predict the result of a match between two teams. So the main step is aggregating the player rows up to the team level for each match, then training a classifier on those team-vs-team features.
 
-1. **Load** the data via KaggleHub
-2. **Aggregate** player rows → one row per match (team-level features)
-3. **EDA** — explore distributions, class balance, correlations
-4. **Preprocess** — scale numeric features, encode categoricals (`ColumnTransformer` + `Pipeline`)
-5. **Model** — Logistic Regression, Random Forest, Gradient Boosting
-6. **Evaluate** — cross-validation, F1 / ROC-AUC, hyperparameter tuning (`GridSearchCV`)
-7. **Interpret** — SHAP to see which stats drive winning
-8. **Simulate** the bracket to predict the champion
+## Workflow:
 
-## Tech
-
-Python · pandas · scikit-learn · matplotlib / seaborn · SHAP · Jupyter
-
-## Running it
-
-```bash
-pip install -r requirements.txt
-jupyter lab
-```
-
-Open `world_cup_predictor.ipynb` and run the cells top to bottom.
+Aggregate player stats to the match level
+Exploratory analysis — distributions, class balance, feature correlations
+Preprocessing with a ColumnTransformer (scale numeric features, one-hot encode categoricals)
+Baseline with DummyClassifier, then logistic regression, random forest, and gradient boosting
+Cross-validation and hyperparameter tuning with GridSearchCV
+SHAP to see which stats drive the predictions
+Simulate the bracket to choose a predicted champion
