@@ -1,20 +1,37 @@
 # World Cup 2026 Predictor
-A machine learning project that predicts FIFA World Cup 2026 match outcomes from player performance stats, then simulates the knockout bracket to pick a tournament winner.
+
+A machine learning project that predicts international football match outcomes and simulates the World Cup 2026 bracket to pick a tournament winner.
 
 ## The data
-The dataset comes from Kaggle and has per-player, per-match statistics — about 54,600 rows and 75 columns covering goals, expected goals (xG), passing, defensive actions, and physical metrics like distance covered and top speed.
 
-Since the 2026 tournament hasn't actually been played, the data is simulated. I'm treating this as a modeling exercise to practice the full ML workflow end to end, not as a real forecast.
+The project uses a real dataset of international football results from 1872 to the present (from Kaggle) — around 45,000 actual matches, each with the two teams, the final score, the tournament, and the venue.
+
+The raw data only has teams and scores, so the real work is feature engineering: for each match I compute each team's recent form (win rate, goals scored and conceded over their previous games) and compare the two teams. These engineered strength features are what let the model predict who wins a specific matchup.
 
 ## Approach
-Each row is one player in one match, but I want to predict the result of a match between two teams. So the main step is aggregating the player rows up to the team level for each match, then training a classifier on those team-vs-team features.
 
-## Workflow:
+Each row is one match between two teams, and the target is the result (home win / away win / draw).
 
-Aggregate player stats to the match level
-Exploratory analysis — distributions, class balance, feature correlations
-Preprocessing with a ColumnTransformer (scale numeric features, one-hot encode categoricals)
-Baseline with DummyClassifier, then logistic regression, random forest, and gradient boosting
-Cross-validation and hyperparameter tuning with GridSearchCV
-SHAP to see which stats drive the predictions
-Simulate the bracket to choose a predicted champion
+Workflow:
+- Build the target from match scores and engineer team-form features
+- Exploratory analysis — outcome balance, home advantage, goal distributions
+- Preprocessing with a ColumnTransformer (impute and scale numeric features, one-hot encode teams)
+- Baseline with DummyClassifier, then logistic regression, random forest, and gradient boosting
+- Cross-validation and hyperparameter tuning with GridSearchCV
+- SHAP to see which features drive the predictions
+- Simulate the bracket to choose a predicted champion
+
+I evaluate with accuracy and macro-averaged F1, since the three outcomes are imbalanced and I want the model to handle draws and away wins, not just the common home win.
+
+## Tools
+
+Python, pandas, scikit-learn, matplotlib / seaborn, SHAP, Jupyter.
+
+## Running it
+
+```bash
+pip install -r requirements.txt
+jupyter lab
+```
+
+Open `world_cup_predictor.ipynb` and run the cells top to bottom. The dataset downloads automatically through kagglehub, so it isn't stored in this repo.
